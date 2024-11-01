@@ -92,3 +92,18 @@ func (n *NotificationRepositoryImpl) GetDetailUserByUserID(userID int) (*model.D
 	}
 	return &user, nil
 }
+
+func (n *NotificationRepositoryImpl) InsertNotificationDB(notification model.InsertToDB) error {
+	query := "INSERT INTO notifications (user_id, title, message, status, notification_type) VALUES (?, ?, ?, ?, ?)"
+	stmt, err := n.db.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(notification.UserId, notification.Title, notification.Message, notification.Status, notification.NotificationType)
+	if err != nil {
+		return err
+	}
+	return nil
+}

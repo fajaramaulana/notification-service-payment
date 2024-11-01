@@ -37,3 +37,11 @@ type DetailUser struct {
 	LName    string `json:"l_name"`
 	Phone    string `json:"phone"`
 }
+
+type InsertToDB struct {
+	UserId           int    `json:"user_id"`
+	Title            string `json:"title"`
+	Message          string `json:"message"`
+	NotificationType string `json:"notification_type"`
+	Status           string `json:"status"`
+}

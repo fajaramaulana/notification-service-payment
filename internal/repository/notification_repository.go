@@ -16,4 +16,5 @@ type NotificationRepository interface {
 	GetDetailUserByUserID(userID int) (*model.DetailUser, error)
 	SendMessageToKafka(producer kafkaconfig.KafkaProducer, message []byte) error
 	InsertNotificationKafka(data model.NotificationToKafka) error
+	InsertNotificationDB(notification model.InsertToDB) error
 }

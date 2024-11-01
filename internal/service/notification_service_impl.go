@@ -77,6 +77,24 @@ func (n *NotificationServiceImpl) SendNotification(ctx context.Context, req *pb.
 		}, status.Error(codes.Internal, "Failed to insert notification to kafka")
 	}
 
+	// Insert to db
+	notificationDB := model.InsertToDB{
+		UserId:           userDetail.ID,
+		Title:            req.GetTitle(),
+		Message:          req.GetMessage(),
+		NotificationType: req.GetType(),
+		Status:           "not yet",
+	}
+
+	err = n.repo.InsertNotificationDB(notificationDB)
+	if err != nil {
+		logrus.Errorf("Failed to insert notification to db: %v", err)
+		return &pb.NotificationResponse{
+			Status:  "false",
+			Message: "Failed to insert notification to db",
+		}, status.Error(codes.Internal, "Failed to insert notification to db")
+	}
+
 	return &pb.NotificationResponse{
 		Status:  "true",
 		Message: "Success",
