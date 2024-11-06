@@ -6,6 +6,7 @@ import (
 	"io"
 	"net"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/fajaramaulana/notification-service-payment/internal/config"
@@ -118,10 +119,23 @@ func run(config config.Config, connectDB func(config.Config) (*sql.DB, error), c
 
 func setupKafka(configuration config.Config) (kafkaconfig.KafkaProducer, error) {
 	brokersUrl := []string{configuration.Get("KAFKA_URL")}
-	maxRetries := 5
-	retryInterval := 30 * time.Second
+	maxRetries := configuration.Get("MAX_RETRIES")
+	maxRetriesInt, err := strconv.Atoi(maxRetries)
 
-	producer, err := config.RetryKafkaConnection(brokersUrl, maxRetries, retryInterval)
+	if err != nil {
+		logrus.Errorf("Failed to convert max retries to int: %v", err)
+		return nil, err
+	}
+
+	retryIntervalStr := configuration.Get("MAX_RETRIES_SECOND")
+	retryInterval, err := strconv.Atoi(retryIntervalStr)
+	if err != nil {
+		logrus.Errorf("Failed to parse retry interval: %v", err)
+		return nil, err
+	}
+	retryIntervalDuration := time.Duration(retryInterval) * time.Second
+
+	producer, err := config.RetryKafkaConnection(brokersUrl, maxRetriesInt, retryIntervalDuration)
 	if err != nil {
 		logrus.Errorf("Failed to connect to Kafka: %v", err)
 		return nil, err // Return the error instead of exiting

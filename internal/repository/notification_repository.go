@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"database/sql"
+
 	"github.com/fajaramaulana/notification-service-payment/internal/config/kafkaconfig"
 	"github.com/fajaramaulana/notification-service-payment/internal/model"
 )
@@ -16,5 +18,5 @@ type NotificationRepository interface {
 	GetDetailUserByUserID(userID int) (*model.DetailUser, error)
 	SendMessageToKafka(producer kafkaconfig.KafkaProducer, message []byte) error
 	InsertNotificationKafka(data model.NotificationToKafka) error
-	InsertNotificationDB(notification model.InsertToDB) error
+	InsertNotificationDB(notification model.InsertToDB) (result sql.Result, err error)
 }

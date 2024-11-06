@@ -55,15 +55,42 @@ func (n *NotificationServiceImpl) SendNotification(ctx context.Context, req *pb.
 		}, status.Error(codes.NotFound, "User not found")
 	}
 
+	// Insert to db
+	notificationDB := model.InsertToDB{
+		UserId:           userDetail.ID,
+		Title:            req.GetTitle(),
+		Message:          req.GetMessage(),
+		NotificationType: req.GetType(),
+		Status:           "pending",
+	}
+
+	res, err := n.repo.InsertNotificationDB(notificationDB)
+	if err != nil {
+		logrus.Errorf("Failed to insert notification to db: %v", err)
+		return &pb.NotificationResponse{
+			Status:  "false",
+			Message: "Failed to insert notification to db",
+		}, status.Error(codes.Internal, "Failed to insert notification to db")
+	}
+
+	idNotif, err := res.LastInsertId()
+	if err != nil {
+		logrus.Errorf("Failed to get last insert id: %v", err)
+		return &pb.NotificationResponse{
+			Status:  "false",
+			Message: "Failed to get last insert id",
+		}, status.Error(codes.Internal, "Failed to get last insert id")
+	}
+
 	// Insert to kafka
 	notification := model.NotificationToKafka{
 		DetailNotificationToKafka: model.DetailNotificationToKafka{
-			ID:               userDetail.ID,
+			ID:               int(idNotif),
 			Email:            userDetail.Email,
 			Title:            req.GetTitle(),
 			Message:          req.GetMessage(),
 			NotificationType: req.GetType(),
-			RequestTime:      req.GetTimestamp(),
+			RequestTime:      req.GetTimestamp().String(),
 		},
 	}
 
@@ -75,24 +102,6 @@ func (n *NotificationServiceImpl) SendNotification(ctx context.Context, req *pb.
 			Status:  "false",
 			Message: "Failed to insert notification to kafka",
 		}, status.Error(codes.Internal, "Failed to insert notification to kafka")
-	}
-
-	// Insert to db
-	notificationDB := model.InsertToDB{
-		UserId:           userDetail.ID,
-		Title:            req.GetTitle(),
-		Message:          req.GetMessage(),
-		NotificationType: req.GetType(),
-		Status:           "not yet",
-	}
-
-	err = n.repo.InsertNotificationDB(notificationDB)
-	if err != nil {
-		logrus.Errorf("Failed to insert notification to db: %v", err)
-		return &pb.NotificationResponse{
-			Status:  "false",
-			Message: "Failed to insert notification to db",
-		}, status.Error(codes.Internal, "Failed to insert notification to db")
 	}
 
 	return &pb.NotificationResponse{
