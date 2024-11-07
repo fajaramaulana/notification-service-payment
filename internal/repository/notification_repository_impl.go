@@ -30,17 +30,11 @@ func (n *NotificationRepositoryImpl) InsertNotificationKafka(data model.Notifica
 
 	// Prepare time and location data
 	t := time.Now()
-	timeLocation, err := time.LoadLocation("Asia/Jakarta")
-	if err != nil {
-		logrus.Error("Failed to load location")
-		return err
-	}
-	logrus.Infof("Processing data at %s", t.In(timeLocation).String())
 
 	mesData := model.InsertToKafka{
 		Status:  true,
 		Message: "Success",
-		Time:    t.In(timeLocation).String(),
+		Time:    t.String(),
 		Data:    data.DetailNotificationToKafka,
 	}
 

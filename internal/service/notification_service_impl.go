@@ -82,6 +82,15 @@ func (n *NotificationServiceImpl) SendNotification(ctx context.Context, req *pb.
 		}, status.Error(codes.Internal, "Failed to get last insert id")
 	}
 
+	typeInt, err := strconv.Atoi(req.GetTypeId())
+	if err != nil {
+		logrus.Errorf("Failed to convert type: %s", req.GetType())
+		return &pb.NotificationResponse{
+			Status:  "false",
+			Message: "Failed to convert type",
+		}, status.Error(codes.InvalidArgument, "Failed to convert type")
+	}
+
 	// Insert to kafka
 	notification := model.NotificationToKafka{
 		DetailNotificationToKafka: model.DetailNotificationToKafka{
@@ -91,6 +100,9 @@ func (n *NotificationServiceImpl) SendNotification(ctx context.Context, req *pb.
 			Message:          req.GetMessage(),
 			NotificationType: req.GetType(),
 			RequestTime:      req.GetTimestamp().String(),
+			IpAddress:        req.GetIpAddress(),
+			UserAgent:        req.GetUserAgent(),
+			TypeId:           typeInt,
 		},
 	}
 

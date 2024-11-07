@@ -20,6 +20,9 @@ type DetailNotificationToKafka struct {
 	Message          string `json:"message"`
 	NotificationType string `json:"notification_type"`
 	RequestTime      string `json:"request_time"`
+	IpAddress        string `json:"ip_address"`
+	UserAgent        string `json:"user_agent"`
+	TypeId           int    `json:"type_id"`
 }
 
 type InsertToKafka struct {
