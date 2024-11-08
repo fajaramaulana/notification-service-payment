@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/IBM/sarama v1.43.3
-	github.com/fajaramaulana/shared-proto-payment v0.0.19
+	github.com/fajaramaulana/shared-proto-payment v0.0.20
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/joho/godotenv v1.5.1
 	github.com/natefinch/lumberjack v2.0.0+incompatible
