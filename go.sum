@@ -20,6 +20,8 @@ github.com/fajaramaulana/shared-proto-payment v0.0.17 h1:GrDHXNF5oJ08SVn40TfVJDA
 github.com/fajaramaulana/shared-proto-payment v0.0.17/go.mod h1:XlWfdKBeqzGs1I7AvnzVdUfaIvO0zAPRW8zRX1kBem0=
 github.com/fajaramaulana/shared-proto-payment v0.0.18 h1:AVQtImfnqy9zU81Bcout29kE8QQwcndZhSHpYsE4inQ=
 github.com/fajaramaulana/shared-proto-payment v0.0.18/go.mod h1:XlWfdKBeqzGs1I7AvnzVdUfaIvO0zAPRW8zRX1kBem0=
+github.com/fajaramaulana/shared-proto-payment v0.0.19 h1:QrD8TGQ2iyRdhQTQgOC5rWFYougmae5wvPiiqNGXDpQ=
+github.com/fajaramaulana/shared-proto-payment v0.0.19/go.mod h1:XlWfdKBeqzGs1I7AvnzVdUfaIvO0zAPRW8zRX1kBem0=
 github.com/fortytw2/leaktest v1.3.0 h1:u8491cBMTQ8ft8aeV+adlcytMZylmA5nnwwkRZjI8vw=
 github.com/fortytw2/leaktest v1.3.0/go.mod h1:jDsjWgpAGjm2CA7WthBh/CdZYEPF31XHquHwclZch5g=
 github.com/go-sql-driver/mysql v1.8.1 h1:LedoTUt/eveggdHS9qUFC1EFSa8bU2+1pZjSRpvNJ1Y=
